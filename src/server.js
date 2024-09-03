@@ -1,12 +1,13 @@
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import express from "express";
 import sequelize from "./config/database.js";
 import dotenv from "dotenv";
 import cors from "cors";
+import userRoutes from "./routes/User.js";
 
 const app = express();
 
-app.use(bodyParser.json());
 dotenv.config();
 
 const corsOptions = {
@@ -15,6 +16,12 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.static("public"));
+
+app.use("/api/auth", userRoutes);
 
 sequelize
   .sync()
