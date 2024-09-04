@@ -16,4 +16,6 @@ router.post("/login", userController.loginUser);
 
 router.get("/get_user", middleware, userController.getUser);
 
+router.post("/logout", userController.logoutUser);
+
 export default router;
