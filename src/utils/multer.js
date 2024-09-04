@@ -2,7 +2,7 @@ import multer from "multer";
 
 export const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "public/profile=pictures");
+    cb(null, "public/profile-pictures");
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);

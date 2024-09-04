@@ -18,8 +18,8 @@ export const createUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const profilePicturePath = file
-      ? "profil-pictures/" + file.filename
-      : "profil-pictures/default.png";
+      ? "profile-pictures/" + file.filename
+      : "profile-pictures/default.png";
 
     const newUser = new User({
       email,
