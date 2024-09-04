@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post(
   "/register",
-  multer({ storage: fileStorage, fileFilter }).single("profil-picture"),
+  multer({ storage: fileStorage, fileFilter }).single("profile-picture"),
   userController.createUser
 );
 
