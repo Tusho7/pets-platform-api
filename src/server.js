@@ -5,6 +5,7 @@ import sequelize from "./config/database.js";
 import dotenv from "dotenv";
 import cors from "cors";
 import userRoutes from "./routes/User.js";
+import faqRoutes from "./routes/Faq.js";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(cookieParser());
 app.use(express.static("public"));
 
 app.use("/api/auth", userRoutes);
+app.use("/api", faqRoutes);
 
 sequelize
   .sync()
