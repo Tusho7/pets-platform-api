@@ -25,6 +25,10 @@ const Admin = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    profilePicture: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     tableName: "admins",

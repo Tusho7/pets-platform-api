@@ -21,6 +21,7 @@ export const createAdmin = async (req, res) => {
       password: hashedPassword,
       firstName,
       lastName,
+      profilePicture: "profile-pictures/default.png",
     });
 
     await newAdmin.save();
