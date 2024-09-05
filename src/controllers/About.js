@@ -60,3 +60,36 @@ export const deleteAboutUs = async (req, res) => {
     res.status(500).json({ message: "Error deleting About Us", error });
   }
 };
+
+export const updateAboutUs = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const aboutUs = await About.findByPk(id);
+    if (!aboutUs) {
+      return res.status(404).json({ message: "About Us not found" });
+    }
+    const {
+      title,
+      introductionOverview,
+      missionStatement,
+      historyBackground,
+      foundingStory,
+      features,
+      howItWorks,
+      languageCode,
+    } = req.body;
+    await aboutUs.update({
+      title,
+      introductionOverview,
+      missionStatement,
+      historyBackground,
+      foundingStory,
+      features,
+      howItWorks,
+      languageCode,
+    });
+    res.json({ message: "About Us updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating About Us", error });
+  }
+};

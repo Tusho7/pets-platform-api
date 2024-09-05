@@ -21,5 +21,10 @@ router.delete(
   adminMiddleware,
   aboutUsController.deleteAboutUs
 );
+router.post(
+  "/update-aboutus/:id",
+  adminMiddleware,
+  aboutUsController.updateAboutUs
+);
 
 export default router;
