@@ -5,6 +5,7 @@ import sequelize from "./config/database.js";
 import dotenv from "dotenv";
 import cors from "cors";
 import userRoutes from "./routes/User.js";
+import adminRoutes from "./routes/Admin.js";
 import faqRoutes from "./routes/Faq.js";
 import aboutUsRoutes from "./routes/About.js";
 
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use(express.static("public"));
 
 app.use("/api/auth", userRoutes);
+app.use("/api/admin-auth", adminRoutes);
 app.use("/api", faqRoutes);
 app.use("/api", aboutUsRoutes);
 
