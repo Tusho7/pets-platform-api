@@ -46,3 +46,17 @@ export const getAboutUs = async (req, res) => {
     res.status(500).json({ message: "Error fetching About Us", error });
   }
 };
+
+export const deleteAboutUs = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const aboutUs = await About.findByPk(id);
+    if (!aboutUs) {
+      return res.status(404).json({ message: "About Us not found" });
+    }
+    await aboutUs.destroy();
+    res.json({ message: "About Us deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting About Us", error });
+  }
+};
