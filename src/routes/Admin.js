@@ -1,6 +1,7 @@
 import express from "express";
 import * as adminController from "../controllers/Admin.js";
 import * as aboutUsController from "../controllers/About.js";
+import * as faqController from "../controllers/Faq.js";
 import { adminMiddleware } from "../middlewares/auth.js";
 
 const router = express.Router();
@@ -26,5 +27,11 @@ router.post(
   adminMiddleware,
   aboutUsController.updateAboutUs
 );
+
+//faq_routes
+router.post("/create-faq", adminMiddleware, faqController.createFaq);
+router.get("/faq", adminMiddleware, faqController.getFaqs);
+router.put("/update-faq/:id", adminMiddleware, faqController.editFaqById);
+router.delete("/delete-faq/:id", adminMiddleware, faqController.deleteFaqById);
 
 export default router;

@@ -32,3 +32,40 @@ export const getFaqs = async (req, res) => {
     res.status(500).json({ message: "Error fetching FAQs", error });
   }
 };
+
+export const editFaqById = async (req, res) => {
+  const { question, answer, languageCode } = req.body;
+  const { id } = req.params;
+
+  try {
+    const faq = await Faq.findByPk(id);
+    if (!faq) {
+      return res.status(404).json({ message: "FAQ not found" });
+    }
+
+    faq.question = question;
+    faq.answer = answer;
+    faq.languageCode = languageCode;
+
+    await faq.save();
+
+    res.json(faq);
+  } catch (error) {
+    console.error("Error updating FAQ:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteFaqById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const faq = await Faq.findByPk(id);
+    if (!faq) {
+      return res.status(404).json({ message: "FAQ not found" });
+    }
+    await faq.destroy();
+    res.json({ message: "FAQ deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting FAQ", error });
+  }
+};
