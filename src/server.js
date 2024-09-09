@@ -8,6 +8,7 @@ import userRoutes from "./routes/User.js";
 import adminRoutes from "./routes/Admin.js";
 import faqRoutes from "./routes/Faq.js";
 import aboutUsRoutes from "./routes/About.js";
+import termsRoutes from "./routes/TermsConditions.js";
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use("/api/auth", userRoutes);
 app.use("/api/admin-auth", adminRoutes);
 app.use("/api", faqRoutes);
 app.use("/api", aboutUsRoutes);
+app.use("/api", termsRoutes);
 
 sequelize
   .sync()

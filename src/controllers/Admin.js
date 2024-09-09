@@ -1,6 +1,7 @@
 import Admin from "../models/Admin.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
 export const createAdmin = async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
@@ -99,5 +100,49 @@ export const logoutAdmin = async (_, res) => {
   } catch (error) {
     console.error("Error logging out admin:", error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const updateAdmin = async (req, res) => {
+  const { email, firstName, lastName, password } = req.body;
+  const adminId = req.admin?.id;
+
+  try {
+    const admin = await Admin.findByPk(adminId);
+
+    if (!admin) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+
+    if (email !== undefined) {
+      admin.email = email;
+    }
+
+    if (firstName !== undefined) {
+      admin.firstName = firstName;
+    }
+    if (lastName !== undefined) {
+      admin.lastName = lastName;
+    }
+    if (password !== undefined) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      admin.password = hashedPassword;
+    }
+
+    await admin.save();
+
+    res.status(200).json(admin);
+  } catch (error) {
+    console.error("Error updating admin:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.findAll();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching users", error });
   }
 };
