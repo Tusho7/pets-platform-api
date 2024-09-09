@@ -51,5 +51,10 @@ router.patch(
   adminMiddleware,
   adminController.toggleBlockUser
 );
+router.delete(
+  "/delete_user/:id",
+  adminMiddleware,
+  adminController.deleteUserById
+);
 
 export default router;
