@@ -3,10 +3,10 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const createUser = async (req, res) => {
-  const { email, password, firstName, lastName } = req.body;
+  const { email, password, firstName, lastName, phoneNumber } = req.body;
   const { file } = req;
 
-  if (!email || !password || !firstName || !lastName) {
+  if (!email || !password || !firstName || !lastName || !phoneNumber) {
     return res.status(400).json({ message: "ყველა ველი აუცილებელია." });
   }
   try {
@@ -27,6 +27,7 @@ export const createUser = async (req, res) => {
       firstName,
       lastName,
       profilePicture: profilePicturePath,
+      phoneNumber,
     });
 
     await newUser.save();
