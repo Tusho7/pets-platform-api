@@ -146,3 +146,23 @@ export const getUsers = async (req, res) => {
     res.status(500).json({ message: "Error fetching users", error });
   }
 };
+
+export const toggleBlockUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.isBlocked = !user.isBlocked;
+    await user.save();
+
+    res.status(200).json({ message: "User blocked status updated" });
+  } catch (error) {
+    console.error("Error blocking user:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
