@@ -113,7 +113,7 @@ export const logoutUser = async (_, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  const { email, firstName, lastName, phoneNumber } = req.body;
+  const { email, firstName, lastName, phoneNumber, password } = req.body;
   const { file } = req;
 
   try {
@@ -135,10 +135,11 @@ export const updateUser = async (req, res) => {
     if (lastName) user.lastName = lastName;
     if (phoneNumber) user.phoneNumber = phoneNumber;
     if (file) user.profilePicture = "profile-pictures/" + file.filename;
+    if (password) user.password = await bcrypt.hash(password, 10);
 
-    await user.save();
+    const updatedUser = await user.save();
 
-    res.status(200).json({ message: "User updated successfully" });
+    res.status(200).json({ message: "User updated successfully", updatedUser });
   } catch (error) {
     console.error("Error updating user:", error);
     res.status(500).json({ message: "Server error" });
