@@ -18,4 +18,11 @@ router.get("/get_user", middleware, userController.getUser);
 
 router.post("/logout", userController.logoutUser);
 
+router.put(
+  "/update_user/:id",
+  multer({ storage: fileStorage, fileFilter }).single("profile-pictures"),
+  middleware,
+  userController.updateUser
+);
+
 export default router;

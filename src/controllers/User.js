@@ -111,3 +111,36 @@ export const logoutUser = async (_, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const updateUser = async (req, res) => {
+  const { email, firstName, lastName, phoneNumber } = req.body;
+  const { file } = req;
+
+  try {
+    const userId = req.user?.id;
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (email) {
+      const userExists = await User.findOne({ where: { email } });
+      if (userExists && userExists.id !== userId) {
+        return res.status(400).json({ message: "Email already in use" });
+      }
+      user.email = email;
+    }
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+    if (file) user.profilePicture = "profile-pictures/" + file.filename;
+
+    await user.save();
+
+    res.status(200).json({ message: "User updated successfully" });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
