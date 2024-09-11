@@ -24,7 +24,7 @@ const Lostpet = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    title: {
+    pet_name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
