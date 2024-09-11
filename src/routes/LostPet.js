@@ -17,4 +17,7 @@ router.post(
   middleware,
   LostPetController.createLostPet
 );
+
+router.get("/lost-pets", LostPetController.getLostPets);
+
 export default router;
