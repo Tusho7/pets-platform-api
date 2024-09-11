@@ -1,4 +1,5 @@
 import Lostpet from "../models/LostPet.js";
+import User from "../models/User.js";
 
 export const createLostPet = async (req, res) => {
   try {
@@ -40,12 +41,25 @@ export const createLostPet = async (req, res) => {
       languageCode,
       userId,
       images: images.map((file) => "lost-pet-images/" + file.filename),
-      videos: videos.map((file) => "lost-pet-videos/" + file.path),
+      videos: videos.map((file) => "lost-pet-videos/" + file.filename),
     });
 
     return res.status(201).json(lostPet);
   } catch (error) {
     console.error("Error creating LostPet:", error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+export const getLostPets = async (req, res) => {
+  try {
+    const lostPets = await Lostpet.findAll({
+      include: User,
+    });
+
+    return res.status(200).json(lostPets);
+  } catch (error) {
+    console.error("Error getting LostPets:", error);
     return res.status(500).json({ message: "Internal server error." });
   }
 };
