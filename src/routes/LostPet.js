@@ -20,4 +20,16 @@ router.post(
 
 router.get("/lost-pets", LostPetController.getLostPets);
 
+router.get(
+  "/lost-pet/:userId",
+  middleware,
+  LostPetController.getLostPetsByUserId
+);
+
+router.put(
+  "/lost-pet/:userId",
+  middleware,
+  LostPetController.updateLostPetByUserId
+);
+
 export default router;
