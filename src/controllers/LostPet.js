@@ -84,10 +84,6 @@ export const updateLostPetByUserId = async (req, res) => {
   const { userId } = req.params;
   const { id: petId, ...updateData } = req.body;
 
-  console.log("updateData", updateData);
-  console.log("petId", petId);
-  console.log("userId", userId);
-
   try {
     const pet = await Lostpet.findOne({ where: { id: petId, userId: userId } });
 
