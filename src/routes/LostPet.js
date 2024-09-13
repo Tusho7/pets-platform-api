@@ -32,4 +32,10 @@ router.put(
   LostPetController.updateLostPetByUserId
 );
 
+router.delete(
+  "/lost-pet/:userId/:petId",
+  middleware,
+  LostPetController.deleteLostPetByUserId
+);
+
 export default router;

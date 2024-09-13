@@ -99,3 +99,22 @@ export const updateLostPetByUserId = async (req, res) => {
     return res.status(500).json({ message: "Internal server error." });
   }
 };
+
+export const deleteLostPetByUserId = async (req, res) => {
+  const { userId, petId } = req.params;
+
+  try {
+    const pet = await Lostpet.findOne({ where: { id: petId, userId } });
+
+    if (!pet) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+
+    await pet.destroy();
+
+    res.status(200).json({ message: "Pet deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting LostPet:", error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
