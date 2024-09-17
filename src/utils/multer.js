@@ -1,4 +1,7 @@
 import multer from "multer";
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
 
 export const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -41,3 +44,27 @@ export const fileStorageForLostPet = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const publicDir = process.env.PUBLIC_DIR;
+const lostPetImagesDir = process.env.LOST_PET_IMAGES_DIR;
+
+export const deleteImageFile = (filename) => {
+  const filePath = path.join(
+    __dirname,
+    "..",
+    "..",
+    publicDir,
+    lostPetImagesDir,
+    filename
+  );
+
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error("Error deleting file:", err);
+      throw err;
+    }
+  });
+};

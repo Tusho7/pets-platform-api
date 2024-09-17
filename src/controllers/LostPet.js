@@ -1,5 +1,6 @@
 import Lostpet from "../models/LostPet.js";
 import User from "../models/User.js";
+import { deleteImageFile } from "../utils/multer.js";
 
 export const createLostPet = async (req, res) => {
   try {
@@ -116,5 +117,39 @@ export const deleteLostPetByUserId = async (req, res) => {
   } catch (error) {
     console.error("Error deleting LostPet:", error);
     return res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+export const deleteLostPetImageByFilename = async (req, res) => {
+  const { petId, filename, userId } = req.params;
+
+  try {
+    if (!petId || !filename || !userId) {
+      return res.status(400).json({ message: "Missing required parameters" });
+    }
+
+    const pet = await Lostpet.findOne({ where: { id: petId } });
+
+    if (!pet) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+
+    if (parseInt(userId, 10) !== pet.userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const oldImages = pet.images || [];
+    const updatedImages = oldImages.filter(
+      (image) => !image.endsWith(filename)
+    );
+
+    await pet.update({ images: updatedImages });
+
+    deleteImageFile(filename);
+
+    res.status(200).json({ message: "Image deleted successfully", pet });
+  } catch (error) {
+    console.error("Error deleting LostPet image:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

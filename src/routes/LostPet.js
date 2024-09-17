@@ -38,4 +38,10 @@ router.delete(
   LostPetController.deleteLostPetByUserId
 );
 
+router.delete(
+  "/lost-pet/:petId/:filename/:userId",
+  middleware,
+  LostPetController.deleteLostPetImageByFilename
+);
+
 export default router;
