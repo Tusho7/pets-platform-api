@@ -153,3 +153,36 @@ export const deleteLostPetImageByFilename = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const uploadLostPetImages = async (req, res) => {
+  const { petId, userId } = req.params;
+
+  try {
+    const pet = await Lostpet.findOne({ where: { id: petId } });
+
+    if (!pet) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+
+    if (parseInt(userId, 10) !== pet.userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const images = req.files?.images || [];
+
+    if (!images.length) {
+      return res.status(400).json({ message: "No images provided" });
+    }
+
+    const updatedImages = pet.images.concat(
+      images.map((file) => "lost-pet-images/" + file.filename)
+    );
+
+    await pet.update({ images: updatedImages });
+
+    res.status(200).json({ message: "Images uploaded successfully", pet });
+  } catch (error) {
+    console.error("Error uploading LostPet images:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

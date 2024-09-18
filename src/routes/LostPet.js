@@ -44,4 +44,11 @@ router.delete(
   LostPetController.deleteLostPetImageByFilename
 );
 
+router.put(
+  "/lost-pet/:petId/:userId",
+  upload.fields([{ name: "images", maxCount: 5 }]),
+  middleware,
+  LostPetController.uploadLostPetImages
+);
+
 export default router;
