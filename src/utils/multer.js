@@ -30,6 +30,19 @@ export const fileFilter = (req, file, cb) => {
   }
 };
 
+export const fileFilterForUser = (req, file, cb) => {
+  if (
+    file.fieldname === "profile-pictures" &&
+    (file.mimetype === "image/png" ||
+      file.mimetype === "image/jpg" ||
+      file.mimetype === "image/jpeg")
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
 export const fileStorageForLostPet = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.fieldname === "images") {
