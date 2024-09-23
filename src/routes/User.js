@@ -1,6 +1,6 @@
 import express from "express";
 import * as userController from "../controllers/User.js";
-import { fileStorage, fileFilter } from "../utils/multer.js";
+import { fileStorage, fileFilter, fileFilterForUser } from "../utils/multer.js";
 import multer from "multer";
 import { middleware } from "../middlewares/auth.js";
 
@@ -20,7 +20,9 @@ router.post("/logout", userController.logoutUser);
 
 router.put(
   "/update_user/:id",
-  multer({ storage: fileStorage, fileFilter }).single("profile-pictures"),
+  multer({ storage: fileStorage, fileFilterForUser }).single(
+    "profile-pictures"
+  ),
   middleware,
   userController.updateUser
 );
