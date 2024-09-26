@@ -14,10 +14,13 @@ export const fileStorage = multer.diskStorage({
 
 export const fileFilter = (req, file, cb) => {
   if (
-    file.fieldname === "images" &&
-    (file.mimetype === "image/png" ||
-      file.mimetype === "image/jpg" ||
-      file.mimetype === "image/jpeg")
+    (file.fieldname === "images" &&
+      (file.mimetype === "image/png" ||
+        file.mimetype === "image/jpg" ||
+        file.mimetype === "image/jpeg")) ||
+    file.mimetype === "image/webp" ||
+    file.mimetype === "image/svg+xml" ||
+    file.mimetype === "image/gif"
   ) {
     cb(null, true);
   } else if (
