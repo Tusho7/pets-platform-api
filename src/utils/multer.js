@@ -61,6 +61,21 @@ export const fileStorageForLostPet = multer.diskStorage({
   },
 });
 
+export const fileStorageForStreetPet = multer.diskStorage({
+  destination: (req, file, cb) => {
+    if (file.fieldname === "images") {
+      cb(null, "public/street-pet-images");
+    } else if (file.fieldname === "videos") {
+      cb(null, "public/street-pet-videos");
+    } else {
+      cb(new Error("Invalid field name"), null);
+    }
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
