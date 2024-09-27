@@ -10,6 +10,7 @@ import faqRoutes from "./routes/Faq.js";
 import aboutUsRoutes from "./routes/About.js";
 import termsRoutes from "./routes/TermsConditions.js";
 import lostPetRoutes from "./routes/LostPet.js";
+import streetPetRoutes from "./routes/StreetPet.js";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/api", faqRoutes);
 app.use("/api", aboutUsRoutes);
 app.use("/api", termsRoutes);
 app.use("/api", lostPetRoutes);
+app.use("/api", streetPetRoutes);
 
 sequelize
   .sync()
