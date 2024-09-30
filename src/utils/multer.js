@@ -81,6 +81,7 @@ const __dirname = path.dirname(__filename);
 
 const publicDir = process.env.PUBLIC_DIR;
 const lostPetImagesDir = process.env.LOST_PET_IMAGES_DIR;
+const streetPetImagesDir = process.env.STREET_PET_IMAGES_DIR;
 
 export const deleteImageFile = (filename) => {
   const filePath = path.join(
@@ -89,6 +90,24 @@ export const deleteImageFile = (filename) => {
     "..",
     publicDir,
     lostPetImagesDir,
+    filename
+  );
+
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error("Error deleting file:", err);
+      throw err;
+    }
+  });
+};
+
+export const deleteImageFileForStreetPets = (filename) => {
+  const filePath = path.join(
+    __dirname,
+    "..",
+    "..",
+    publicDir,
+    streetPetImagesDir,
     filename
   );
 
