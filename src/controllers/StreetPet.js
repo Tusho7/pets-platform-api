@@ -1,6 +1,9 @@
 import StreetPet from "../models/StreetPets.js";
 import User from "../models/User.js";
-import { deleteImageFileForStreetPets } from "../utils/multer.js";
+import {
+  deleteImageFileForStreetPets,
+  deleteVideoFileForStreetPets,
+} from "../utils/multer.js";
 
 export const createStreetPet = async (req, res) => {
   try {
@@ -187,6 +190,73 @@ export const deleteStreetPetImageByFilename = async (req, res) => {
     res.status(200).json({ message: "Image deleted successfully", pet });
   } catch (error) {
     console.error("Error deleting StreetPet image:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const uploadStreetPetVideos = async (req, res) => {
+  const { petId, userId } = req.params;
+
+  try {
+    const pet = await StreetPet.findOne({ where: { id: petId } });
+
+    if (!pet) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+
+    if (parseInt(userId, 10) !== pet.userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const videos = req.files?.videos || [];
+
+    if (!videos.length) {
+      return res.status(400).json({ message: "No videos provided" });
+    }
+
+    const updatedVideos = pet.videos.concat(
+      videos.map((file) => "street-pet-videos/" + file.filename)
+    );
+
+    await pet.update({ videos: updatedVideos });
+
+    res.status(200).json({ message: "Videos uploaded successfully", pet });
+  } catch (error) {
+    console.error("Error uploading StreetPet videos:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteStreetPetVideoByFilename = async (req, res) => {
+  const { petId, filename, userId } = req.params;
+
+  try {
+    if (!petId || !filename || !userId) {
+      return res.status(400).json({ message: "Missing required parameters" });
+    }
+
+    const pet = await StreetPet.findOne({ where: { id: petId } });
+
+    if (!pet) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+
+    if (parseInt(userId, 10) !== pet.userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const oldVideos = pet.videos || [];
+    const updatedVideos = oldVideos.filter(
+      (video) => !video.endsWith(filename)
+    );
+
+    await pet.update({ videos: updatedVideos });
+
+    deleteVideoFileForStreetPets(filename);
+
+    res.status(200).json({ message: "Video deleted successfully", pet });
+  } catch (error) {
+    console.error("Error deleting StreetPet video:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

@@ -47,4 +47,17 @@ router.put(
   StreetPetController.uploadStreetPetImages
 );
 
+router.put(
+  "/street-pet-video/:petId/:userId",
+  upload.fields([{ name: "videos", maxCount: 5 }]),
+  middleware,
+  StreetPetController.uploadStreetPetVideos
+);
+
+router.delete(
+  "/street-pet-video/:petId/:filename/:userId",
+  middleware,
+  StreetPetController.deleteStreetPetVideoByFilename
+);
+
 export default router;
