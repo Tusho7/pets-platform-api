@@ -1,6 +1,9 @@
 import Lostpet from "../models/LostPet.js";
 import User from "../models/User.js";
-import { deleteImageFile } from "../utils/multer.js";
+import {
+  deleteImageFile,
+  deleteVideoFileForLostPets,
+} from "../utils/multer.js";
 
 export const createLostPet = async (req, res) => {
   try {
@@ -183,6 +186,73 @@ export const uploadLostPetImages = async (req, res) => {
     res.status(200).json({ message: "Images uploaded successfully", pet });
   } catch (error) {
     console.error("Error uploading LostPet images:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const uploadLostPetVideos = async (req, res) => {
+  const { petId, userId } = req.params;
+
+  try {
+    const pet = await Lostpet.findOne({ where: { id: petId } });
+
+    if (!pet) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+
+    if (parseInt(userId, 10) !== pet.userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const videos = req.files?.videos || [];
+
+    if (!videos.length) {
+      return res.status(400).json({ message: "No videos provided" });
+    }
+
+    const updatedVideos = pet.videos.concat(
+      videos.map((file) => "lost-pet-videos/" + file.filename)
+    );
+
+    await pet.update({ videos: updatedVideos });
+
+    res.status(200).json({ message: "Videos uploaded successfully", pet });
+  } catch (error) {
+    console.error("Error uploading LostPet videos:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteLostPetVideoByFilename = async (req, res) => {
+  const { petId, filename, userId } = req.params;
+
+  try {
+    if (!petId || !filename || !userId) {
+      return res.status(400).json({ message: "Missing required parameters" });
+    }
+
+    const pet = await Lostpet.findOne({ where: { id: petId } });
+
+    if (!pet) {
+      return res.status(404).json({ message: "Pet not found" });
+    }
+
+    if (parseInt(userId, 10) !== pet.userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const oldVideos = pet.videos || [];
+    const updatedVideos = oldVideos.filter(
+      (video) => !video.endsWith(filename)
+    );
+
+    await pet.update({ videos: updatedVideos });
+
+    deleteVideoFileForLostPets(filename);
+
+    res.status(200).json({ message: "Video deleted successfully", pet });
+  } catch (error) {
+    console.error("Error deleting LostPet video:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

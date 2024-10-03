@@ -51,4 +51,17 @@ router.put(
   LostPetController.uploadLostPetImages
 );
 
+router.put(
+  "/lost-pet-video/:petId/:userId",
+  upload.fields([{ name: "videos", maxCount: 5 }]),
+  middleware,
+  LostPetController.uploadLostPetVideos
+);
+
+router.delete(
+  "/lost-pet-video/:petId/:filename/:userId",
+  middleware,
+  LostPetController.deleteLostPetVideoByFilename
+);
+
 export default router;

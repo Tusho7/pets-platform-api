@@ -139,3 +139,21 @@ export const deleteVideoFileForStreetPets = (filename) => {
     }
   });
 };
+
+export const deleteVideoFileForLostPets = (filename) => {
+  const filePath = path.join(
+    __dirname,
+    "..",
+    "..",
+    publicDir,
+    lostPetVideosDir,
+    filename
+  );
+
+  fs.unlink(filePath, (err) => {
+    if (err) {
+      console.error("Error deleting file:", err);
+      throw err;
+    }
+  });
+};
