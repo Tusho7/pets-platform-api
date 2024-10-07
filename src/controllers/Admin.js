@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
+// Admins
+
 export const createAdmin = async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
 
@@ -137,6 +139,8 @@ export const updateAdmin = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// Users
 
 export const getUsers = async (req, res) => {
   try {
