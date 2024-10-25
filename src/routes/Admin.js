@@ -57,4 +57,11 @@ router.delete(
   adminController.deleteUserById
 );
 
+//street_pets_routes
+router.delete(
+  "/delete_street_pet/:petId",
+  adminMiddleware,
+  adminController.deleteStreetPetById
+);
+
 export default router;
