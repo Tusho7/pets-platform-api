@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import StreetPet from "../models/StreetPets.js";
+import LostPet from "../models/LostPet.js";
 
 // Admins
 
@@ -211,3 +212,24 @@ export const deleteStreetPetById = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// LostPets
+
+export const deleteLostPetById = async (req, res) => {
+  const { petId } = req.params;
+
+  try {
+    const lostPet = await LostPet.findByPk(petId);
+
+    if (!lostPet) {
+      return res.status(404).json({ message: "LostPet not found" });
+    }
+
+    await lostPet.destroy();
+
+    res.status(200).json({ message: "LostPet deleted" });
+  } catch (error) {
+    console.error("Error deleting LostPet:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+}

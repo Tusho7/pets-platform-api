@@ -64,4 +64,10 @@ router.delete(
   adminController.deleteStreetPetById
 );
 
+//lost_pets_routes
+router.delete(
+  "/delete_lost_pet/:petId",
+  adminMiddleware,
+  adminController.deleteLostPetById
+);
 export default router;
